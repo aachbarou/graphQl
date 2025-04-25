@@ -1,0 +1,141 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: vh;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #6a11cb 0%, #030303 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    margin-top: 10%;
+    background: rgba(255, 255, 255, 0.1); /* شفافية خفيفة */
+    width: 800px;
+    height: 450px;
+    border-radius: 20px;
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3); /* ظل أكثر وضوح */
+    backdrop-filter: blur(10px); /* الزجاجي الحقيقي */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* بوردر شفاف */
+}
+
+.left, .right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.left img {
+    width: 70%;
+    height: auto;
+}
+
+.right {
+    padding: 2rem;
+    color: white;
+}
+
+.right h2 {
+    margin-bottom: 2rem;
+    color: white;
+    font-size: 2rem;
+}
+
+.right input {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 50px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.right input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.login-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    font-size: 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: background 0.3s;
+}
+
+.login-btn:hover {
+    background-color: #27ae60;
+}
+
+.forgot, .create {
+    font-size: 0.9rem;
+    color: #ddd;
+    text-decoration: none;
+    margin-top: 0.5rem;
+}
+
+.forgot:hover, .create:hover {
+    text-decoration: underline;
+}
+.error  {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+
+
+
+.header {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.1); /* شفافية خفيفة */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.header .logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+.header .nav {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.header .nav .nav-btn {
+    border-radius: 5px;
+    font-size: 1rem;
+    color: rgb(109, 113, 168);
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    width: 80px;
+    height: 40px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.header .nav .nav-btn:hover {
+    color: #eef0ef;
+    border-bottom: 2px solid #3c8f5e;
+    cursor: pointer;
+}
