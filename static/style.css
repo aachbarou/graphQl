@@ -98,25 +98,36 @@ body {
 
 
 
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #6a11cb 0%, #030303 100%);
+    color: white;
+}
 
 .header {
     width: 100%;
     padding: 1rem 2rem;
-    background: rgba(255, 255, 255, 0.1); /* شفافية خفيفة */
+    background: rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
+    box-sizing: border-box;
 }
 
 .header .logo {
     font-size: 1.5rem;
     font-weight: 600;
+    color: white;
 }
+
 .header .nav {
     display: flex;
     gap: 1.5rem;
@@ -131,11 +142,68 @@ body {
     background: transparent;
     width: 80px;
     height: 40px;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .header .nav .nav-btn:hover {
     color: #eef0ef;
     border-bottom: 2px solid #3c8f5e;
-    cursor: pointer;
+}
+
+.chart-container {
+    margin-top: 80px; /* To account for fixed header */
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.chart1 {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 1049px;
+    overflow: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
+    .chart1 {
+        transform: scale(0.8);
+    }
+}
+
+@media (max-width: 900px) {
+    .chart1 {
+        transform: scale(0.7);
+    }
+}
+
+@media (max-width: 700px) {
+    .chart1 {
+        transform: scale(0.6);
+    }
+}
+
+@media (max-width: 500px) {
+    .header {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .header .nav {
+        margin-top: 1rem;
+    }
+    
+    .chart1 {
+        transform: scale(0.5);
+    }
 }
