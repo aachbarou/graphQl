@@ -67,10 +67,10 @@ try {
         );
     const chart1  =  div("chart1" )
     body.append(header );
-    addEventListeners();
-    // document.getElementsByClassName("chart1")[0].innerHTML = Chart;
     document.querySelector('.home-btn').classList.add('window_active');
 
+    addEventListeners();
+    // document.getElementsByClassName("chart1")[0].innerHTML = Chart;
 }
 
 function Lougout(){
@@ -87,6 +87,7 @@ function Profile() {
     console.log(Data)
     //  add  class active  
     document.querySelector('.profile-btn').classList.add('window_active');
+    document.querySelector('.home-btn').classList.toggle("window_active")
     let body = document.body;
     if (body.querySelector('.profile')) {
         body.querySelector('.profile').remove();
@@ -98,7 +99,7 @@ function Profile() {
         // Profile Header Section
         ce('section', 'profile-header').append(
             ce('h1', '', 'Profile'),
-            ce('img', '').setAtr('src', 'https://www.svgrepo.com/show/512692/profile-1336.svg').setAtr('alt', 'Profile Icon')
+            ce('img', '').setAtr('src', 'https://www.svgrepo.com/show/316473/user-1.svg').setAtr('alt', 'Profile Icon')
         ),
         
         // Profile Body Section

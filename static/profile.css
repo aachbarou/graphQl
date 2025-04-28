@@ -61,3 +61,16 @@
 .profile-body .email img {
     margin-right: 10px;
 }
+p {
+   font-family: 'Times New Roman', Times, serif;
+   font-size: large;
+}
+.profile-body h2 {
+    color  : rgb(119, 131, 15)  ;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; 
+}
+.profile-header h1 { 
+   font-family :'Courier New', Courier, monospace ; 
+
+   
+}
