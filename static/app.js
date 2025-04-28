@@ -27,9 +27,7 @@ export function login() {
     })
 }
 
-export  async function  Homepage(){
-    
-    console.log("home   page");
+export  async function  Homepage(){  
 try {
     const response = await fetch('https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql', {
         method: 'POST',
@@ -53,8 +51,8 @@ try {
 }
     let body = document.body;
    body.innerHTML = ""; 
-    const header = div("header")
-        .append(
+   // Header build 
+    const header = div("header").append(
             div("logo", '').append(
                 ce('img', '').setAtr('src', './images/LOGO.svg').setAtr('alt', 'Logo')
             ),
@@ -64,9 +62,16 @@ try {
                     button("nav-btn profile-btn", "Profile"),
                     button("nav-btn logout-btn", "Logout")
                 )
-        );
-    const chart1  =  div("chart1" )
-    body.append(header );
+    );
+    let Container =  div('Container' , '').append(
+        div('polygone-section').append(
+            ce('h1' , '' , 'Best skills'),
+            div('polygone')
+        ),
+    div('Chart-section').append(ce('h1' , '' , 'Distribution of users by XP'),
+                        div('chart'))
+)
+    body.append(header  , Container );
     document.querySelector('.home-btn').classList.add('window_active');
 
     addEventListeners();
@@ -92,7 +97,8 @@ function Profile() {
     if (body.querySelector('.profile')) {
         body.querySelector('.profile').remove();
     }
-   // body.innerHTML = ""; // Clear the body to ensure a fresh profile display
+    document.querySelector('.Container').style.display = "none";
+    // body.innerHTML = ""; // Clear the body to ensure a fresh profile display
     
     // Create Profile container
     let profile = div("profile").append(

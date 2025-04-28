@@ -166,6 +166,20 @@ body {
     border-radius: 10px;
 }
 
+.Container {
+    text-align: center;
+    background: #64248f;
+    display: flex ;
+    width: 100%;
+}
+.Container .polygone-section {
+    width: 50%;
+    background: #000;
+}
+.Container .Chart-section{
+    width: 50%;
+    background: #64248f;
+}
 /* Chart Container */
 .chart-container {
     margin-top: 80px;
