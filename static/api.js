@@ -1,3 +1,4 @@
+import { Homepage } from "./app.js";
 
 export function  GenerateToken(email , password , Errorelem) {
     const credentials = btoa(`${email}:${password}`); 
@@ -23,6 +24,7 @@ export function  GenerateToken(email , password , Errorelem) {
             }
             console.log(data );
             localStorage.setItem('token', data);
+            Homepage();
         })
 }
 

@@ -152,6 +152,11 @@ body {
     color: #eef0ef;
     border-bottom: 2px solid #3c8f5e;
 }
+.header .nav .nav-btn.window_active {
+    color: #eef0ef;
+    background: #8220f1;
+    transition: all 0.3s ease;
+}
 
 .chart-container {
     margin-top: 80px; /* To account for fixed header */

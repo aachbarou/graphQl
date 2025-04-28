@@ -1,6 +1,10 @@
 import { GenerateToken  } from "./api.js";
-import  { login } from "./script.js";
-export  function  Auth(JWtoken = null) {
-    GenerateToken();
-    login();
+import  { Homepage, login } from "./app.js";
+export  function  Auth() {
+   let  Jwtoken = localStorage.getItem('token');
+    if (!Jwtoken) {
+        login();
+        return 
+    }
+    Homepage();
 }
