@@ -9,24 +9,11 @@ body {
     font-family: 'Manrope', sans-serif;
     background: linear-gradient(135deg, #6a11cb 0%, #030303 100%);
     color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block; /* or remove display:flex */
 }
 
-/* Container Style */
-.container {
-    margin-top: 10%;
-    background: rgba(255, 255, 255, 0.1);
-    width: 800px;
-    height: 450px;
-    border-radius: 20px;
-    display: flex;
-    overflow: hidden;
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
+
+
 
 /* Sections inside Container */
 .left, .right {
@@ -53,7 +40,6 @@ body {
     margin-bottom: 2rem;
     font-size: 2rem;
     background: linear-gradient(90deg, #ff8a00, #e52e71);
-    -webkit-text-fill-color: transparent;
 }
 
 
@@ -167,6 +153,7 @@ body {
 }
 
 .Container {
+    margin: 120px auto 0 auto;
     text-align: center;
     background: #64248f;
     display: flex ;
@@ -174,7 +161,7 @@ body {
 }
 .Container .polygone-section {
     width: 50%;
-    background: #000;
+    background: #b89090;
 }
 .Container .Chart-section{
     width: 50%;
@@ -235,3 +222,14 @@ body {
         transform: scale(0.5);
     }
 }
+
+svg text {
+    font-family: sans-serif;
+  }
+  .bar {
+    fill: teal;
+    transition: fill 0.2s;
+  }
+  .bar:hover {
+    fill: darkcyan;
+  }

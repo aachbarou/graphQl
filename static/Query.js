@@ -1,15 +1,50 @@
-  export const query =  `{
-  user {
-      firstName
-      lastName
-      email
-      auditRatio
+export const query = `
+{
+  user: user_by_pk(id: 5677) {
+    id
+    login
+    attrs
+    email
+    campus
+    profile
+    lastName
+    firstName
+    avatarUrl
+    auditRatio
+    totalUp
+    totalUpBonus
+    totalDown
+    roles {
+      slug
+    }
+    labels {
+      labelName
+      labelId
+    }
+    records {
+      startAt
+      endAt
+      message
+      createdAt
+      type {
+        canAccessPlatform
+        isPermanent
+        canBeAuditor
+        label
+        type
+      }
+    }
+    transactions(
+      order_by: [{ type: desc }, { amount: desc }]
+      distinct_on: [type]
+      where: {
+        userId: { _eq: 5677 }
+        type: { _like: "skill_%" }
+      }
+    ) {
+      type
+      amount
+    }
   }
-  
-  xp_view(where: { path: { _ilike: "%module%" } }) {
-    path
-    amount
-  }
-
 }
 `;
