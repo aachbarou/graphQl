@@ -1,8 +1,9 @@
+export let  Data = null;
 import { ce  , div , button , input}  from "./createlem.js";
 import { GenerateToken  } from "./api.js";
 import  { Auth } from "./Auth.js";
 import { query } from "./Query.js";
-let  Data = null;
+
 export function login() {
     const body = document.body;
     body.innerHTML = "";
@@ -28,7 +29,7 @@ export function login() {
 }
 
 export  async function  Homepage(){  
-    
+    console.log("this is homepage");
 try {
     const response = await fetch('https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql', {
         method: 'POST',
@@ -36,16 +37,20 @@ try {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({ query })
+        body: JSON.stringify({ query: await query() })
     });
     const data = await response.json();
+    console.log( "data  before  parsing " ,data);
+    console.log("error" , data.errors);
+    
     // Process the data as needed
     if  (data.errors) {
-        console.error('Error fetching data:', data.errors);
+        console.error('Error fetching data:', data.errors[0].message);
         login();
         return 
     }
     Data = data['data'];
+    console.log("this is data" ,Data)
     //  chart  building
 
 } catch (error) {
@@ -69,23 +74,25 @@ try {
     let Container =  div('Container' , '').append(
         div('polygone-section').append(
             ce('h1' , '' , 'Best skills'),
-            ce('svg' , '' , '' ).setAtr('id' , 'polygone').setAtr('width' , '900').setAtr('height' , '400')
+            ce('section' , '' , '' ).setAtr('id' , 'polygone')
         ),
     div('Chart-section').append(ce('h1' , '' , 'Distribution of users by XP'),
-                        div('chart'))
+                        ce('section' , '' , '' ).setAtr('id' , 'CercleSvgSetion'))
 )
     body.append(header , ce('br')  , Container );
     document.querySelector('.home-btn').classList.add('window_active');
 
     
     transactionsvg();
+    CercleSvg();
+    
 
     addEventListeners();
     // document.getElementsByClassName("chart1")[0].innerHTML = Chart;
 }
 
 function Lougout(){
-    localStorage.removeItem('token');
+    localStorage.removeItem('token' )  ;localStorage.removeItem('UserId');
     Data =  null
     Auth();
 }
@@ -130,7 +137,7 @@ function Profile() {
                 ce('h2', '', `${Data.user.lastName}`)
             ),
             ),
-            // audit and email 
+            // audit and email polygone
             div ('audit-email').append(
                 // Email Section
                 ce('section', 'Email').append(
@@ -185,22 +192,37 @@ function transactionsvg() {
 
     if (maxXP === 0) {
         console.error("Maximum XP value is 0, cannot create chart.");
+        svg.innerHTML = "Maximum XP value is 0, cannot create chart.";
         return;
     }
 
     transactions.forEach((transaction, index) => {
+       
         const amount = transaction.amount;
+        console.log(amount);
         const barHeight = Math.max(0, (chartHeight / maxXP) * amount);
         const x = padding + index * (barWidth + spacing);
-        const y = height - padding - barHeight;
-
+        const y = height - padding - barHeight ;
+       //  draw lines of  right and  bottom
+       
+       
+        // draw  borders 
+        const border = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        border.setAttribute("x", x);
+        border.setAttribute("y", y);
+        border.setAttribute("width", barWidth);
+        border.setAttribute("height", barHeight);
+        border.setAttribute("fill", "none");
+        border.setAttribute("stroke", "black");
+        border.setAttribute("stroke-width", "1");
+        svg.append(border);
         // Draw the bar
         const bar = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         bar.setAttribute("x", x);
         bar.setAttribute("y", y);
         bar.setAttribute("width", barWidth);
         bar.setAttribute("height", barHeight);
-        bar.setAttribute("fill", "steelblue");
+        bar.setAttribute("fill", "green");
         svg.append(bar);
 
         // Add skill name below each bar
@@ -227,5 +249,9 @@ function transactionsvg() {
 
 
 function CercleSvg(){
+    let  section  = document.getElementById('CercleSvgSetion');
+    section.innerHTML = `<svg height="400" width="600" xmlns="http://www.w3.org/2000/svg">
+  <circle r="90" cx="300" cy="300" fill="red" />
+</svg>`;
     
 }

@@ -1,6 +1,14 @@
-export const query = `
+import { GetUserId } from "./api.js";
+export let UserId = localStorage.getItem('UserId');
+export async  function query () { 
+  if  (UserId == 0 || UserId == null) {
+    UserId = await GetUserId();
+    console.log("daba a= ahwa  : " ,UserId);
+  }
+  console.log("user  ID : " ,UserId , typeof UserId);
+  return  `
 {
-  user: user_by_pk(id: 5677) {
+  user : user_by_pk(id: ${UserId}) {
     id
     login
     attrs
@@ -38,7 +46,7 @@ export const query = `
       order_by: [{ type: desc }, { amount: desc }]
       distinct_on: [type]
       where: {
-        userId: { _eq: 5677 }
+        userId: { _eq: ${UserId} }
         type: { _like: "skill_%" }
       }
     ) {
@@ -47,4 +55,5 @@ export const query = `
     }
   }
 }
-`;
+`};
+
