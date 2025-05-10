@@ -50,7 +50,7 @@ try {
         return 
     }
     Data = data['data'];
-    console.log("this is data" ,Data)
+    getxps(Data);
     //  chart  building
 
 } catch (error) {
@@ -249,9 +249,17 @@ function transactionsvg() {
 
 
 function CercleSvg(){
-    let  section  = document.getElementById('CercleSvgSetion');
-    section.innerHTML = `<svg height="400" width="600" xmlns="http://www.w3.org/2000/svg">
-  <circle r="90" cx="300" cy="300" fill="red" />
-</svg>`;
     
+    
+}
+
+
+function getxps(data){
+    let  xps = data.user.xps;
+  let  xps2 = xps.filter((xp) =>xp.path.includes('/oujda/module/') && xp.path.split('/').length <=  5  ).map(xp2 => { console.log(xp2) ;return xp2.amount});
+       let  somme  = parseInt(xps2.reduce((a, b) => a + b, 0));
+   // comvert  it  to kb  from  bytes
+   somme = somme / 1024;
+   console.log(somme);
+   
 }

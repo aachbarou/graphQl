@@ -11,23 +11,14 @@ export async  function query () {
   user : user_by_pk(id: ${UserId}) {
     id
     login
-    attrs
     email
-    campus
-    profile
     lastName
     firstName
     avatarUrl
     auditRatio
-    totalUp
-    totalUpBonus
-    totalDown
-    roles {
-      slug
-    }
-    labels {
-      labelName
-      labelId
+     xps {
+      amount
+      path
     }
     records {
       startAt
@@ -57,3 +48,25 @@ export async  function query () {
 }
 `};
 
+
+// {
+//   user {
+//     firstName
+//     lastName
+//     auditRatio
+//     email
+//     login
+//     xps {
+//       amount
+//       path
+//     }
+//   }
+//   transaction (
+//     distinct_on: type
+//     where: { type: { _like: "skill_%"} }
+//   ) {
+//     id
+//     type
+//     amount
+//   }
+// }
