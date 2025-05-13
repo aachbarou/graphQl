@@ -90,7 +90,7 @@ try {
     
     CercleSvg();
     getxps(Data);
-    
+    document.body.append(XpAmount());
 
     addEventListeners();
     // document.getElementsByClassName("chart1")[0].innerHTML = Chart;
@@ -285,6 +285,21 @@ function CercleSvg() {
         line.setAttribute("stroke-width", "1");
         svg.appendChild(line);
     }
+}
+function XpAmount(){
+let Container =  document.createElement("div")
+Container.setAttribute("id", "XPINFO")
+Container.append(
+    div("XpAmount" ).append(
+        ce('h1', '', 'Xp Amount'),
+        ce('span', '', '999KB')
+    ) ,
+    div("Livele" ).append(
+        ce('h1', '', 'Level'),
+        ce('span', '', '1')
+)
+);
+return Container
 }
 
 
