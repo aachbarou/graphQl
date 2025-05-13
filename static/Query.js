@@ -48,25 +48,3 @@ export async  function query () {
 }
 `};
 
-
-// {
-//   user {
-//     firstName
-//     lastName
-//     auditRatio
-//     email
-//     login
-//     xps {
-//       amount
-//       path
-//     }
-//   }
-//   transaction (
-//     distinct_on: type
-//     where: { type: { _like: "skill_%"} }
-//   ) {
-//     id
-//     type
-//     amount
-//   }
-// }
