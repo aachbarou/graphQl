@@ -16,22 +16,10 @@ export async  function query () {
     firstName
     avatarUrl
     auditRatio
+    campus
      xps {
       amount
       path
-    }
-    records {
-      startAt
-      endAt
-      message
-      createdAt
-      type {
-        canAccessPlatform
-        isPermanent
-        canBeAuditor
-        label
-        type
-      }
     }
     transactions(
       order_by: [{ type: desc }, { amount: desc }]

@@ -6,9 +6,9 @@ import { query } from "./Query.js";
 
 export function login() {
     const body = document.body;
-    body.setAttribute('class', 'login-page');
+    body.setAttribute('class', 'login-page fade-in.delay-3');
     body.innerHTML = "";
-    const container = div('container-login');
+    const container = div('container-login container-login2');
 
     const left = div('left').append(
         ce('img', '').setAtr('src', './images/undraw_login_weas.svg').setAtr('alt', 'Login Image')
@@ -17,7 +17,7 @@ export function login() {
         ce('h2', '', 'Member Login'),
         input('email', 'Email'),
         input('password', 'Password'),
-        ce('p', 'error', 'Invalid username or password'),
+        ce('p', 'error', 'Your email and password is required'),
         button('login-btn', 'LOGIN'),
     );
     container.append(left, right);
@@ -31,7 +31,7 @@ export function login() {
 }
 
 export  async function  Homepage(){  
-    console.log("this is homepage");
+  
 try {
     const response = await fetch('https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql', {
         method: 'POST',
@@ -42,8 +42,7 @@ try {
         body: JSON.stringify({ query: await query() })
     });
     const data = await response.json();
-    console.log( "data  before  parsing " ,data);
-    console.log("error" , data.errors);
+    console.log( "data  before  parsing " ,data['data'].user);
     
     // Process the data as needed
     if  (data.errors) {
@@ -76,11 +75,11 @@ try {
                 
     );
     let Container =  div('Container' , '').append(
-        div('polygone-section').append(
+        div('polygone-section fade-in delay-2').append(
             ce('h1' , '' , 'Best skills'),
             ce('section' , '' , '' ).setAtr('id' , 'polygone')
         ),
-    div('Chart-section').append(ce('h1' , '' , 'Distribution of users by XP'),
+    div('Chart-section fade-in delay-1').append(ce('h1' , '' , 'Distribution of users by XP'),
                         div('CercleSvg').setAtr('id' , 'CercleSvgSetion'))
 )
     body.append(header , ce('br')  , Container );
@@ -184,13 +183,15 @@ function CercleSvg() {
     const height = 300;
     const centerX = width / 2;
     const centerY = height / 2;
-    const radius = 90;
+    const radius = 130;
 
     const transactions = Data.user.transactions;
-    const maxXP = Math.max(...transactions.map(t => t.amount));
 
-    if (maxXP === 0) {
-        console.error("Maximum XP value is 0, cannot create chart.");
+    // 👇 Use global max XP for scaling (always 100%)
+    const maxXP = 100;
+
+    if (transactions.length === 0) {
+        console.error("No transactions found.");
         return;
     }
 
@@ -213,9 +214,11 @@ function CercleSvg() {
 
     const points = [];
 
-    // Draw concentric circles for every 10%
+    // 🟢 Draw concentric rings every 10% of 100
     for (let i = 1; i <= 10; i++) {
-        const r = (radius / 10) * i;
+        const valuePercent = i / 10;
+        const r = radius * valuePercent;
+
         const ring = document.createElementNS(svgNS, "circle");
         ring.setAttribute("cx", centerX);
         ring.setAttribute("cy", centerY);
@@ -223,14 +226,12 @@ function CercleSvg() {
         ring.setAttribute("fill", "none");
         ring.setAttribute("stroke", "#ddd");
         ring.setAttribute("stroke-width", "0.5");
-        ring.setAttribute("stroke-dasharray", "2,2"); // optional dashed style
+        ring.setAttribute("stroke-dasharray", "2,2");
         svg.appendChild(ring);
     }
 
-    let i = 0;
-
-    transactions.forEach(({ type, amount }) => {
-      
+    // 🔵 Draw skill points
+    transactions.forEach(({ type, amount }, i) => {
         const normalized = amount / maxXP;
         const angle = (2 * Math.PI / transactions.length) * i;
 
@@ -239,41 +240,36 @@ function CercleSvg() {
 
         points.push({ x, y });
 
-        // Draw data point circle
+        // Dot
         const circle = document.createElementNS(svgNS, "circle");
         circle.setAttribute("cx", x);
         circle.setAttribute("cy", y);
-        circle.setAttribute("r", 4);
+        circle.setAttribute("r", 5);
         circle.setAttribute("fill", "#00c6ff");
         svg.appendChild(circle);
 
-        // Draw label
+        // Label
         const label = document.createElementNS(svgNS, "text");
-        const offsetX = 10 * Math.cos(angle); // shift label slightly out
+        const offsetX = 10 * Math.cos(angle);
         const offsetY = 10 * Math.sin(angle);
         label.setAttribute("x", x + offsetX);
         label.setAttribute("y", y + offsetY);
         label.setAttribute("font-size", "10");
         label.setAttribute("text-anchor", "middle");
         label.setAttribute("alignment-baseline", "middle");
-    
-        // Event handling for hover (similar to getxps)
-    
 
-        // Add events for hover
+        // Hover events
         circle.addEventListener("mouseover", () => {
-            label.textContent = type; // Show type on hover
+            label.textContent = type;
         });
         circle.addEventListener("mouseout", () => {
-            label.textContent = ""; // Hide type on mouseout
+            label.textContent = "";
         });
 
         svg.appendChild(label);
-
-        i++;
     });
 
-    // Draw lines connecting the points
+    // 🔗 Connect all points
     for (let i = 0; i < points.length; i++) {
         const next = (i + 1) % points.length;
         const line = document.createElementNS(svgNS, "line");
@@ -286,17 +282,19 @@ function CercleSvg() {
         svg.appendChild(line);
     }
 }
+
+let XPS =  0;
 function XpAmount(){
 let Container =  document.createElement("div")
 Container.setAttribute("id", "XPINFO")
 Container.append(
     div("XpAmount" ).append(
         ce('h1', '', 'Xp Amount'),
-        ce('span', '', '999KB')
+        ce('span', '', `${Math.round(XPS / 1000)}KB`)
     ) ,
     div("Livele" ).append(
-        ce('h1', '', 'Level'),
-        ce('span', '', '1')
+        ce('h1', '', 'Login'),
+        ce('span', '', `${Data.user.login}`)
 )
 );
 return Container
@@ -308,11 +306,13 @@ return Container
 
 
 function getxps(data) {
+
     let  xps = data.user.xps;
-  let  xpsAMount = xps.filter((xp)  => (!xp.path.includes("piscine")  && xp.path.split("/").length == 4) );
-  console.log("xpsAMount" , xpsAMount);
+    XPS = xps.filter((xp)  => (!xp.path.includes("piscine-") || xp.path  == "/oujda/module/piscine-js" ) ).map(xp => xp.amount).reduce((a , b) => a + b, 0);
+    let  xpsAMount = xps.filter((xp)  => (!xp.path.includes("piscine")  && xp.path.split("/").length == 4) );
   let  somme  = parseInt(xpsAMount.map(xp => xp.amount).reduce((a , b) => a + b, 0));
    somme = somme / 1000;
+
    const svg  = document.createElementNS("http://www.w3.org/2000/svg", "svg");
    svg.setAttribute("id", "svgChart200");
    svg.setAttribute("width", "700");
@@ -325,7 +325,6 @@ function getxps(data) {
   // const transactions = Data.user.transactions;
  
    const maxXP = Math.max(...xpsAMount.map(t => t.amount).map(t => t / 1024));
-  console.log("maxXP" , maxXP);
    const chartHeight = height - 2 * padding;
    if (maxXP === 0) {
        console.error("Maximum XP value is 0, cannot create chart.");

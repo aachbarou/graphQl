@@ -26,8 +26,8 @@ export function  GenerateToken(email , password , Errorelem) {
             console.log(data);
             localStorage.setItem('token', data);
             localStorage.setItem('UserId' , GetUserId());
-            Homepage();
-        })
+            Homepage(); 
+          })
 }
 
 export  async function GetUserId() {
@@ -49,7 +49,7 @@ export  async function GetUserId() {
         return null;
       }
       localStorage.setItem('UserId', data.data.user[0].id);
-      const Id = data.data.user[0].id;
+      const Id = data.data.user[0]
       console.log("This is ID:", Id);
       return Id;
   
