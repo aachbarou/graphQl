@@ -285,3 +285,24 @@ svg {
   animation-delay: 0.9s;
 }
 
+.Powerdby {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 14px;
+  color: #888;
+  z-index: 999;
+}
+
+
+.Powerdby a {
+  color: #007494;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.Powerdby a:hover {
+  color: #0077cc;
+}

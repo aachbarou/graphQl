@@ -21,7 +21,12 @@ export function login() {
         button('login-btn', 'LOGIN'),
     );
     container.append(left, right);
-    body.append(container);
+    const Powerdby  = () => {
+        return div('Powerdby').append(
+            ce('a' , '' , 'Powered By aachbaro').setAtr('href' , 'https://www.linkedin.com/in/ahmed-achbarou/').setAtr('target' , '_blank')
+        )
+    }
+    body.append(container , Powerdby());
     
     document.querySelector('.login-btn').addEventListener('click', () => {
         const email = document.querySelector('input[name="Email"]').value;
@@ -31,6 +36,8 @@ export function login() {
 }
 
 export  async function  Homepage(){  
+    // reload  page  
+    window.location.reload();
   
 try {
     const response = await fetch('https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql', {
