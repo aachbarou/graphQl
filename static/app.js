@@ -36,8 +36,7 @@ export function login() {
 }
 
 export  async function  Homepage(){  
-    // reload  page  
-    window.location.reload();
+   
   
 try {
     const response = await fetch('https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql', {
