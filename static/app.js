@@ -326,8 +326,8 @@ function getxps(data) {
    let  section = document.querySelector(".CercleSvg"); 
    const height = 300;
    const padding = 50;
-   const barWidth = 10;
-   const spacing = 20;
+   const barWidth = 400/xpsAMount.length;
+   const spacing = 10;
   // const transactions = Data.user.transactions;
  
    const maxXP = Math.max(...xpsAMount.map(t => t.amount).map(t => t / 1024));
