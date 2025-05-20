@@ -149,10 +149,11 @@ body {
   flex-direction: row-reverse;
   justify-content: center;
   gap: 20px;
-  overflow-x: auto;
   padding: 10px;
 }
-
+.polygone-section {
+  width: 500px;
+}
 /* Sections */
 .polygone-section,
 .Chart-section {
@@ -160,6 +161,15 @@ body {
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Make polygone-section and Chart-section responsive */
+.polygone-section,
+.Chart-section {
+  width: 100%;
+  max-width: 500px;
+  min-width: 260px;
+  box-sizing: border-box;
 }
 
 .polygone-section h1,
@@ -171,13 +181,32 @@ body {
 /* SVG Containers */
 #polygone,
 #CercleSvgSetion {
+  overflow: auto;
   max-width: 100%;
-  max-height: 400px; /* أو القيمة اللي بغيت */
-  overflow-x: auto;
-  overflow-y: auto;
+  max-height: 400px; 
   padding: 10px;
 }
+
+/* Ensure SVG containers are responsive */
+#polygone,
+#CercleSvgSetion {
+  width: 100%;
+  max-width: 100%;
+  max-height: 400px;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
 svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Ensure SVG containers are responsive */
+svg {
+  width: 100%;
   max-width: 100%;
   height: auto;
   display: block;
@@ -253,6 +282,37 @@ svg {
 
   .left img {
     max-width: 200px;
+  }
+}
+
+/* Responsive adjustments for main container and sections */
+@media (max-width: 900px) {
+  .polygone-section,
+  .Chart-section {
+    max-width: 100%;
+    min-width: 180px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .Container {
+    padding: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .polygone-section,
+  .Chart-section {
+    width: 100%;
+    max-width: 100%;
+    min-width: 120px;
+    padding: 8px;
+  }
+  #polygone,
+  #CercleSvgSetion {
+    max-height: 250px;
+    padding: 5px;
   }
 }
 

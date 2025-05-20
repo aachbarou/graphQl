@@ -184,47 +184,39 @@ function  addEventListeners() {
 Auth();
 function CercleSvg() {
     const svgNS = "http://www.w3.org/2000/svg";
-
-    const width = 600;
-    const height = 300;
+    let cn = document.querySelector(".polygone-section");
+    if (!cn) return;
+    const width = cn.clientWidth;
+    const height = Math.min(width, 350); // Keep aspect ratio
     const centerX = width / 2;
     const centerY = height / 2;
-    const radius = 130;
-
+    const radius = Math.min(centerX, centerY) - 20; // Padding from edges
     const transactions = Data.user.transactions;
-
-    // 👇 Use global max XP for scaling (always 100%)
     const maxXP = 100;
 
-    if (transactions.length === 0) {
+    if (!transactions || transactions.length === 0) {
         console.error("No transactions found.");
         return;
     }
-
     // Clear old SVG if exists
     const oldSvg = document.getElementById("svgChart100");
     if (oldSvg) oldSvg.remove();
-
     const svg = document.createElementNS(svgNS, "svg");
     svg.setAttribute("id", "svgChart100");
     svg.setAttribute("width", width);
     svg.setAttribute("height", height);
-
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
     const container = document.querySelector("#polygone");
     if (!container) {
         console.error("Container #polygone not found.");
         return;
     }
-
     container.append(svg);
-
     const points = [];
-
-    // 🟢 Draw concentric rings every 10% of 100
+    // Draw concentric rings
     for (let i = 1; i <= 10; i++) {
         const valuePercent = i / 10;
         const r = radius * valuePercent;
-
         const ring = document.createElementNS(svgNS, "circle");
         ring.setAttribute("cx", centerX);
         ring.setAttribute("cy", centerY);
@@ -236,14 +228,12 @@ function CercleSvg() {
         svg.appendChild(ring);
     }
 
-    // 🔵 Draw skill points
+    // Draw skill points
     transactions.forEach(({ type, amount }, i) => {
         const normalized = amount / maxXP;
         const angle = (2 * Math.PI / transactions.length) * i;
-
         const x = centerX + normalized * radius * Math.cos(angle);
         const y = centerY + normalized * radius * Math.sin(angle);
-
         points.push({ x, y });
 
         // Dot
@@ -263,19 +253,16 @@ function CercleSvg() {
         label.setAttribute("font-size", "10");
         label.setAttribute("text-anchor", "middle");
         label.setAttribute("alignment-baseline", "middle");
-
-        // Hover events
         circle.addEventListener("mouseover", () => {
             label.textContent = type;
         });
         circle.addEventListener("mouseout", () => {
             label.textContent = "";
         });
-
         svg.appendChild(label);
     });
 
-    // 🔗 Connect all points
+    // Connect all points
     for (let i = 0; i < points.length; i++) {
         const next = (i + 1) % points.length;
         const line = document.createElementNS(svgNS, "line");
@@ -288,6 +275,90 @@ function CercleSvg() {
         svg.appendChild(line);
     }
 }
+
+// Responsive bar chart
+function getxps(data) {
+    let xps = data.user.xps;
+    XPS = xps.filter((xp) => (!xp.path.includes("piscine-") || xp.path == "/oujda/module/piscine-js")).map(xp => xp.amount).reduce((a, b) => a + b, 0);
+    let xpsAMount = xps.filter((xp) => (!xp.path.includes("piscine") && xp.path.split("/").length == 4));
+    let somme = parseInt(xpsAMount.map(xp => xp.amount).reduce((a, b) => a + b, 0));
+    somme = somme / 1000;
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("id", "svgChart200");
+    let svgWidth = document.querySelector(".CercleSvg").clientWidth;
+    svg.setAttribute("width", svgWidth);
+    svg.setAttribute("height", "300");
+    svg.setAttribute("viewBox", `0 0 ${svgWidth} 300`);
+    let section = document.querySelector(".CercleSvg");
+    const height = 300;
+    const padding = 50;
+    const barAreaWidth = svgWidth - 2 * padding;
+    const barWidth = Math.max(10, (barAreaWidth - (xpsAMount.length - 1) * 10) / xpsAMount.length);
+    const spacing = 10;
+    const maxXP = Math.max(...xpsAMount.map(t => t.amount).map(t => t / 1000));
+    const chartHeight = height - 2 * padding;
+    if (maxXP === 0) {
+        console.error("Maximum XP value is 0, cannot create chart.");
+        svg.innerHTML = "Maximum XP value is 0, cannot create chart.";
+        return;
+    }
+    xpsAMount.forEach((xp, index) => {
+        const amount = xp.amount / 1000;
+        const barHeight = Math.max(0, (chartHeight / maxXP) * amount);
+        const x = padding + index * (barWidth + spacing);
+        const y = height - padding - barHeight;
+        // draw borders
+        const border = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        border.setAttribute("x", x);
+        border.setAttribute("y", y);
+        border.setAttribute("width", barWidth);
+        border.setAttribute("height", barHeight);
+        border.setAttribute("fill", "none");
+        border.setAttribute("stroke", "black");
+        border.setAttribute("stroke-width", "1");
+        svg.append(border);
+        // Draw the bar
+        const bar = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        bar.setAttribute("x", x);
+        bar.setAttribute("y", y);
+        bar.setAttribute("width", barWidth);
+        bar.setAttribute("height", barHeight);
+        bar.setAttribute("fill", "green");
+        svg.append(bar);
+
+        // Add skill name below each bar
+        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        label.setAttribute("x", x + barWidth / 2);
+        label.setAttribute("y", height - padding + 15);
+        label.setAttribute("text-anchor", "middle");
+        label.setAttribute("font-size", "9");
+        bar.addEventListener("mouseover", () => {
+            label.textContent = xp.path.split("/").pop();
+        });
+        bar.addEventListener("mouseout", () => {
+            label.textContent = "";
+        });
+        svg.append(label);
+
+        // Add amount value above each bar
+        const xpValue = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        xpValue.setAttribute("x", x + barWidth / 2);
+        xpValue.setAttribute("y", y - 5);
+        xpValue.setAttribute("text-anchor", "middle");
+        xpValue.setAttribute("font-size", "10");
+        xpValue.textContent = Math.round(amount) + " KB";
+        svg.append(xpValue);
+    });
+
+    section.innerHTML = ""; // Clear previous chart
+    section.append(svg);
+}
+
+// Add this to re-render charts on resize
+window.addEventListener("resize", () => {
+    CercleSvg();
+    getxps(Data);
+});
 
 let XPS =  0;
 function XpAmount(){
@@ -304,90 +375,4 @@ Container.append(
 )
 );
 return Container
-}
-
-
-
-
-
-
-function getxps(data) {
-
-    let  xps = data.user.xps;
-    XPS = xps.filter((xp)  => (!xp.path.includes("piscine-") || xp.path  == "/oujda/module/piscine-js" ) ).map(xp => xp.amount).reduce((a , b) => a + b, 0);
-    let  xpsAMount = xps.filter((xp)  => (!xp.path.includes("piscine")  && xp.path.split("/").length == 4) );
-  let  somme  = parseInt(xpsAMount.map(xp => xp.amount).reduce((a , b) => a + b, 0));
-   somme = somme / 1000;
-
-   const svg  = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-   svg.setAttribute("id", "svgChart200");
-   svg.setAttribute("width", "700");
-   svg.setAttribute("height", "300");
-   let  section = document.querySelector(".CercleSvg"); 
-   const height = 300;
-   const padding = 50;
-   const barWidth = 400/xpsAMount.length;
-   const spacing = 10;
-  // const transactions = Data.user.transactions;
- 
-   const maxXP = Math.max(...xpsAMount.map(t => t.amount).map(t => t / 1024));
-   const chartHeight = height - 2 * padding;
-   if (maxXP === 0) {
-       console.error("Maximum XP value is 0, cannot create chart.");
-       svg.innerHTML = "Maximum XP value is 0, cannot create chart.";
-       return;
-   }
-   xpsAMount.forEach((xp, index) => {
-       const amount = xp.amount / 1024;
-       const barHeight = Math.max(0, (chartHeight / maxXP) * amount);
-       const x = padding + index * (barWidth + spacing);
-       const y = height - padding - barHeight ;
-       // draw  borders 
-       const border = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-       border.setAttribute("x", x);
-       border.setAttribute("y", y);
-       border.setAttribute("width", barWidth);
-       border.setAttribute("height", barHeight);
-       border.setAttribute("fill", "none");
-       border.setAttribute("stroke", "black");
-       border.setAttribute("stroke-width", "1");
-       svg.append(border);
-       // Draw the bar
-       const bar = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-       bar.setAttribute("x", x);
-       bar.setAttribute("y", y);
-       bar.setAttribute("width", barWidth);
-       bar.setAttribute("height", barHeight);
-       bar.setAttribute("fill", "green");
-       svg.append(bar);
-
-       // Add skill name below each bar
-       const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-       label.setAttribute("x", x + barWidth / 2);
-       label.setAttribute("y", height - padding + 15);
-       label.setAttribute("text-anchor", "middle");
-       label.setAttribute("font-size", "9");
-   
-       // alert  path  whene hover on bar
-       bar.addEventListener("mouseover", () => {
-           label.textContent = xp.path.split("/").pop();
-       });
-       bar.addEventListener("mouseout", () => {
-           label.textContent = "";
-       });
-       svg.append(label);
-
-       // Add amount value above each bar
-       const xpValue = document.createElementNS("http://www.w3.org/2000/svg", "text");
-       xpValue.setAttribute("x", x + barWidth / 2);
-       xpValue.setAttribute("y", y - 5);
-       xpValue.setAttribute("text-anchor", "middle");
-       xpValue.setAttribute("font-size", "10");
-       xpValue.textContent = Math.round(amount )+ " KB";
-       svg.append(xpValue);
-   });
-
-
-   section.append(svg);
-
 }
