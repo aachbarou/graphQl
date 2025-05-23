@@ -1,19 +1,17 @@
 import { Homepage } from "./app.js";
 export let UserId = 0 ;
-export function  GenerateToken(email , password , Errorelem) {
+export async  function  GenerateToken(email , password , Errorelem) {
     const credentials = btoa(`${email}:${password}`); 
     // Jwt Token
-    fetch("https://learn.zone01oujda.ma/api/auth/signin" , {
+    const response = await fetch("https://learn.zone01oujda.ma/api/auth/signin" , {
         method : "POST",
         headers : { 
             'Content-Type': 'application/json',
             'Authorization': `Basic ${credentials}`
         },
     })
-        .then(res => {
-                return res.json();
-        })
-        .then(data => {
+           const data = await response.json();
+       //    console.log("this is " ,data);
             if  (data.error) {
               Errorelem.setText(data.error);
               Errorelem.style.display = 'block';
@@ -23,11 +21,9 @@ export function  GenerateToken(email , password , Errorelem) {
                 
                 return ;
             }
-            console.log(data);
             localStorage.setItem('token', data);
             localStorage.setItem('UserId' , GetUserId());
-            Homepage(); 
-          })
+            Homepage();       
 }
 
 export  async function GetUserId() {

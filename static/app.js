@@ -36,7 +36,7 @@ export function login() {
 }
 
 export  async function  Homepage(){  
-   
+   console.log("this is token" , localStorage.getItem('token'));
   
 try {
     const response = await fetch('https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql', {
@@ -47,27 +47,28 @@ try {
         },
         body: JSON.stringify({ query: await query() })
     });
+    
     const data = await response.json();
     console.log( "data  before  parsing " ,data['data'].user);
-    
-    // Process the data as needed
+     if (data.errors || !data.data || !data.data.user) {
+            console.error('Error fetching data:', data.errors ? data.errors : 'No user data');
+            login();
+            return;
+        }
+    console.log("data  errrr " , data.data);
     if  (data.errors) {
-        console.error('Error fetching data:', data.errors[0].message);
+        console.error('Error fetching data:', data.errors);
         login();
         return 
     }
     Data = data['data'];
-    
-    //  chart  building
 
 } catch (error) {
     console.error('Error fetching data:', error);
 }
     let body = document.body;
-    //  delet  the  class name  from  body  
     body.removeAttribute('class');
    body.innerHTML = ""; 
-   // Header build 
     const header = div("header").append(
             div("logo", '').append(
                 ce('img', '').setAtr('src', './images/LOGO.svg').setAtr('alt', 'Logo')
@@ -85,20 +86,16 @@ try {
             ce('h1' , '' , 'Best skills'),
             ce('section' , '' , '' ).setAtr('id' , 'polygone')
         ),
-    div('Chart-section fade-in delay-1').append(ce('h1' , '' , 'Distribution of users by XP'),
-                        div('CercleSvg').setAtr('id' , 'CercleSvgSetion'))
+    div('Chart-section fade-in delay-1').append(ce('h1' , '' , 'Projects by XP'),
+                        div('CercleSvg').setAtr('id' , 'CercleSvgSetion')).append(ce('p' , 'barinfo' , 'Bar Info : ').append(ce('span' , 'projectname' , 'Hover over a bar to see the project Information'), ce('span' , 'projectxp' , '').setAtr('id' , 'projectxp'))),
 )
     body.append(header , ce('br')  , Container );
     document.querySelector('.home-btn').classList.add('window_active');
 
-    
-    
     CercleSvg();
     getxps(Data);
     document.body.append(XpAmount());
-
     addEventListeners();
-    // document.getElementsByClassName("chart1")[0].innerHTML = Chart;
 }
 
 function Lougout(){
@@ -112,7 +109,6 @@ function Profile() {
         login();
         return
     }
-    //  add  class active  
     document.querySelector('.profile-btn').classList.add('window_active');
     document.querySelector('.home-btn').classList.toggle("window_active")
     let body = document.body;
@@ -121,54 +117,37 @@ function Profile() {
     }
     let Container = document.querySelector('.Container');
     Container.innerHTML = "";
-    // body.innerHTML = ""; // Clear the body to ensure a fresh profile display
-    
-    // Create Profile container
     let profile = div("profile").append(
-        // Profile Header Section
         ce('section', 'profile-header').append(
             ce('h1', '', 'Profile'),
             ce('img', '').setAtr('src', 'https://www.svgrepo.com/show/316473/user-1.svg').setAtr('alt', 'Profile Icon')
         ),
-        
-        // Profile Body Section
         div('profile-body').append(
-            // Name Section
             ce('section', 'name').append(
-                 // First Name Section
             ce('section', 'firstname').append(
                 ce('p', '', 'First Name'),
-                ce('h2', '', `${Data.user.firstName}`)
+                ce('h2', '', `${Data.user[0].firstName}`)
             ),
-            
-            // Last Name Section
             ce('section', 'lastname').append(
                 ce('p', '', 'Last Name'),
-                ce('h2', '', `${Data.user.lastName}`)
+                ce('h2', '', `${Data.user[0].lastName}`)
             ),
             ),
-            // audit and email polygone
             div ('audit-email').append(
-                // Email Section
                 ce('section', 'Email').append(
                     ce('img', '').setAtr('src', 'https://www.svgrepo.com/show/473944/email.svg').setAtr('alt', 'Email Icon'),
                     ce('p', '', 'Email'),
-                    ce('h2', '', `${Data.user.email}`)
+                    ce('h2', '', `${Data.user[0].email}`)
                 ),
-                
-                // Audit Ratio Section
                 ce('section', 'Audit-Ratio').append(
                     ce('img', '').setAtr('src', 'https://www.svgrepo.com/show/518874/ratio.svg').setAtr('alt', 'Audit Icon'),
                     ce('p', '', 'Audit Ratio'),
-                    ce('h2', '', `${(Data.user.auditRatio).toFixed(2)}KB`)
+                    ce('h2', '', `${(Data.user[0].auditRatio).toFixed(2)}KB`)
                 )
             ),
-            
-           
         )
     );
-    
-    Container.append( profile); // Append the profile to the body
+    Container.append( profile);
 }
 function  addEventListeners() {
     document.querySelector('.home-btn').addEventListener('click', () => {
@@ -187,18 +166,17 @@ function CercleSvg() {
     let cn = document.querySelector(".polygone-section");
     if (!cn) return;
     const width = cn.clientWidth;
-    const height = Math.min(width, 350); // Keep aspect ratio
+    const height = Math.min(width, 350);
     const centerX = width / 2;
     const centerY = height / 2;
-    const radius = Math.min(centerX, centerY) - 20; // Padding from edges
-    const transactions = Data.user.transactions;
+    const radius = Math.min(centerX, centerY) - 20;
+    const transactions = Data.user[0].transactions;
     const maxXP = 100;
 
     if (!transactions || transactions.length === 0) {
         console.error("No transactions found.");
         return;
     }
-    // Clear old SVG if exists
     const oldSvg = document.getElementById("svgChart100");
     if (oldSvg) oldSvg.remove();
     const svg = document.createElementNS(svgNS, "svg");
@@ -213,7 +191,6 @@ function CercleSvg() {
     }
     container.append(svg);
     const points = [];
-    // Draw concentric rings
     for (let i = 1; i <= 10; i++) {
         const valuePercent = i / 10;
         const r = radius * valuePercent;
@@ -228,7 +205,6 @@ function CercleSvg() {
         svg.appendChild(ring);
     }
 
-    // Draw skill points
     transactions.forEach(({ type, amount }, i) => {
         const normalized = amount / maxXP;
         const angle = (2 * Math.PI / transactions.length) * i;
@@ -236,7 +212,6 @@ function CercleSvg() {
         const y = centerY + normalized * radius * Math.sin(angle);
         points.push({ x, y });
 
-        // Dot
         const circle = document.createElementNS(svgNS, "circle");
         circle.setAttribute("cx", x);
         circle.setAttribute("cy", y);
@@ -244,7 +219,6 @@ function CercleSvg() {
         circle.setAttribute("fill", "#00c6ff");
         svg.appendChild(circle);
 
-        // Label
         const label = document.createElementNS(svgNS, "text");
         const offsetX = 10 * Math.cos(angle);
         const offsetY = 10 * Math.sin(angle);
@@ -262,7 +236,6 @@ function CercleSvg() {
         svg.appendChild(label);
     });
 
-    // Connect all points
     for (let i = 0; i < points.length; i++) {
         const next = (i + 1) % points.length;
         const line = document.createElementNS(svgNS, "line");
@@ -276,23 +249,24 @@ function CercleSvg() {
     }
 }
 
-// Responsive bar chart
 function getxps(data) {
-    let xps = data.user.xps;
+    let xps = data.user[0].xps;
     XPS = xps.filter((xp) => (!xp.path.includes("piscine-") || xp.path == "/oujda/module/piscine-js")).map(xp => xp.amount).reduce((a, b) => a + b, 0);
     let xpsAMount = xps.filter((xp) => (!xp.path.includes("piscine") && xp.path.split("/").length == 4));
     let somme = parseInt(xpsAMount.map(xp => xp.amount).reduce((a, b) => a + b, 0));
     somme = somme / 1000;
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("id", "svgChart200");
-    let svgWidth = document.querySelector(".CercleSvg").clientWidth;
-    svg.setAttribute("width", svgWidth);
-    svg.setAttribute("height", "300");
-    svg.setAttribute("viewBox", `0 0 ${svgWidth} 300`);
     let section = document.querySelector(".CercleSvg");
     const height = 300;
     const padding = 50;
-    const barAreaWidth = svgWidth - 2 * padding;
+    const minBarWidth = 40; // px per bar
+    // Calculate minimum SVG width needed for all bars
+    const minSvgWidth = Math.max(section.clientWidth, xpsAMount.length * minBarWidth + 2 * padding);
+    svg.setAttribute("width", minSvgWidth); // SVG will be at least this wide
+    svg.setAttribute("height", height);
+    svg.setAttribute("viewBox", `0 0 ${minSvgWidth} ${height}`);
+    const barAreaWidth = minSvgWidth - 2 * padding;
     const barWidth = Math.max(10, (barAreaWidth - (xpsAMount.length - 1) * 10) / xpsAMount.length);
     const spacing = 10;
     const maxXP = Math.max(...xpsAMount.map(t => t.amount).map(t => t / 1000));
@@ -307,7 +281,6 @@ function getxps(data) {
         const barHeight = Math.max(0, (chartHeight / maxXP) * amount);
         const x = padding + index * (barWidth + spacing);
         const y = height - padding - barHeight;
-        // draw borders
         const border = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         border.setAttribute("x", x);
         border.setAttribute("y", y);
@@ -317,7 +290,6 @@ function getxps(data) {
         border.setAttribute("stroke", "black");
         border.setAttribute("stroke-width", "1");
         svg.append(border);
-        // Draw the bar
         const bar = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         bar.setAttribute("x", x);
         bar.setAttribute("y", y);
@@ -326,35 +298,21 @@ function getxps(data) {
         bar.setAttribute("fill", "green");
         svg.append(bar);
 
-        // Add skill name below each bar
-        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        label.setAttribute("x", x + barWidth / 2);
-        label.setAttribute("y", height - padding + 15);
-        label.setAttribute("text-anchor", "middle");
-        label.setAttribute("font-size", "9");
+        const prjn = document.querySelector('.projectname');
         bar.addEventListener("mouseover", () => {
-            label.textContent = xp.path.split("/").pop();
+          prjn.textContent = xp.path.split("/").pop()+"  " + "XP Amount : " +  Math.round(amount) + " KB";;
         });
         bar.addEventListener("mouseout", () => {
-            label.textContent = "";
+            prjn.textContent = "Hover over a bar to see the project Information";
         });
-        svg.append(label);
-
-        // Add amount value above each bar
-        const xpValue = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        xpValue.setAttribute("x", x + barWidth / 2);
-        xpValue.setAttribute("y", y - 5);
-        xpValue.setAttribute("text-anchor", "middle");
-        xpValue.setAttribute("font-size", "10");
-        xpValue.textContent = Math.round(amount) + " KB";
-        svg.append(xpValue);
+     
+       
     });
 
-    section.innerHTML = ""; // Clear previous chart
+    section.innerHTML = "";
     section.append(svg);
 }
 
-// Add this to re-render charts on resize
 window.addEventListener("resize", () => {
     CercleSvg();
     getxps(Data);
@@ -369,9 +327,9 @@ Container.append(
         ce('h1', '', 'Xp Amount'),
         ce('span', '', `${Math.round(XPS / 1000)}KB`)
     ) ,
-    div("Livele" ).append(
+    div("User" ).append(
         ce('h1', '', 'Login'),
-        ce('span', '', `${Data.user.login}`)
+        ce('span', '', `${Data.user[0].login}`)
 )
 );
 return Container
