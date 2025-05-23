@@ -281,15 +281,6 @@ function getxps(data) {
         const barHeight = Math.max(0, (chartHeight / maxXP) * amount);
         const x = padding + index * (barWidth + spacing);
         const y = height - padding - barHeight;
-        const border = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        border.setAttribute("x", x);
-        border.setAttribute("y", y);
-        border.setAttribute("width", barWidth);
-        border.setAttribute("height", barHeight);
-        border.setAttribute("fill", "none");
-        border.setAttribute("stroke", "black");
-        border.setAttribute("stroke-width", "1");
-        svg.append(border);
         const bar = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         bar.setAttribute("x", x);
         bar.setAttribute("y", y);
@@ -298,15 +289,16 @@ function getxps(data) {
         bar.setAttribute("fill", "green");
         svg.append(bar);
 
-        const prjn = document.querySelector('.projectname');
+        const prjn = document.querySelector('.projectname'); const xpAmount = document.querySelector('#projectxp');
         bar.addEventListener("mouseover", () => {
-          prjn.textContent = xp.path.split("/").pop()+"  " + "XP Amount : " +  Math.round(amount) + " KB";;
+        bar.setAttribute("fill", "#00b894");
+        prjn.textContent = xp.path.split("/").pop()+"  " + "";
+        xpAmount.textContent = `${Math.round(amount)}KB`;
         });
         bar.addEventListener("mouseout", () => {
-            prjn.textContent = "Hover over a bar to see the project Information";
+            bar.setAttribute("fill", "green");
+            prjn.textContent = "Hover over a bar to see the project Information"; xpAmount.textContent = "";
         });
-     
-       
     });
 
     section.innerHTML = "";
