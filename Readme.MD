@@ -2,6 +2,8 @@
 
 A lightweight, responsive frontend dashboard for interacting with the [zone01oujda.ma](https://learn.zone01oujda.ma) API. This project includes login authentication, dynamic SVG visualization, and user XP tracking—all styled with custom CSS and animated UI elements.
 
+**Live Demo:** [https://graphql-a.netlify.app/](https://graphql-a.netlify.app/)
+
 ## 🚀 Features
 
 - 🔐 Login using Basic Auth (email/password)
@@ -15,6 +17,7 @@ A lightweight, responsive frontend dashboard for interacting with the [zone01ouj
 - **Frontend:** HTML, CSS (custom), JavaScript (ES6)
 - **Auth API:** [learn.zone01oujda.ma](https://learn.zone01oujda.ma)
 
+> You can easily deploy this project on [Netlify](https://www.netlify.com/) by connecting your repository and selecting the `static` folder as the publish directory—no backend setup required.
 
 ## 🔑 Authentication Flow
 

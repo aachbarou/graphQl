@@ -36,8 +36,6 @@ export function login() {
 }
 
 export  async function  Homepage(){  
-   console.log("this is token" , localStorage.getItem('token'));
-  
 try {
     const response = await fetch('https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql', {
         method: 'POST',
@@ -65,6 +63,8 @@ try {
 
 } catch (error) {
     console.error('Error fetching data:', error);
+    login() ;
+    return 
 }
     let body = document.body;
     body.removeAttribute('class');
@@ -146,7 +146,19 @@ function Profile() {
                 )
             ),
         )
+      
     );
+      let  prfxp =  div('profile-xp').append(
+                ce('section', 'Xp').append(
+                    ce('p', '', 'XP Amount'),
+                    ce('h2', '', `${Math.round(XPS / 1000)}KB`)
+                ),
+                ce('section', 'Xp').append(
+                    ce('p', '', 'Username'),
+                    ce('h2', '', `${Data.user[0].login}`)
+                )
+            )
+    profile.append(prfxp);
     Container.append( profile);
 }
 function  addEventListeners() {
@@ -160,7 +172,7 @@ function  addEventListeners() {
         Lougout();
     });
 }
-Auth();
+
 function CercleSvg() {
     const svgNS = "http://www.w3.org/2000/svg";
     let cn = document.querySelector(".polygone-section");
@@ -248,13 +260,12 @@ function CercleSvg() {
         svg.appendChild(line);
     }
 }
-
 function getxps(data) {
     let xps = data.user[0].xps;
     XPS = xps.filter((xp) => (!xp.path.includes("piscine-") || xp.path == "/oujda/module/piscine-js")).map(xp => xp.amount).reduce((a, b) => a + b, 0);
-    let xpsAMount = xps.filter((xp) => (!xp.path.includes("piscine") && xp.path.split("/").length == 4));
+    let xpsAMount = xps.filter((xp) => (!xp.path.includes("piscine") && xp.path.split("/").length == 4)).filter((xp) => xp.amount > 0);
     let somme = parseInt(xpsAMount.map(xp => xp.amount).reduce((a, b) => a + b, 0));
-    somme = somme / 1000;
+    somme = somme / 1000; 
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("id", "svgChart200");
     let section = document.querySelector(".CercleSvg");
@@ -326,3 +337,4 @@ Container.append(
 );
 return Container
 }
+Auth();
