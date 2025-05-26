@@ -141,24 +141,35 @@ body {
 }
 
 .nav-btn {
-  background: linear-gradient(90deg, #0072ff 0%, #00c6ff 100%);
-  color: #fff;
-  border: none;
+  background: transparent;
+  color: #0072ff;
+  border: 2px solid #0072ff;
   border-radius: 8px;
   padding: 10px 22px;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 114, 255, 0.08);
-  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  box-shadow: none;
+  transition: 
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.1s;
   outline: none;
 }
 
 .nav-btn:hover,
 .nav-btn.window_active {
-  background: linear-gradient(90deg, #005bb5 0%, #00aaff 100%);
-  box-shadow: 0 4px 16px rgba(0, 114, 255, 0.15);
+  background: #0072ff;
+  color: #fff;
+  border-color: #005bb5;
   transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 16px rgba(0, 114, 255, 0.12);
+}
+
+/* Optional: Add a subtle shadow on focus for accessibility */
+.nav-btn:focus {
+  box-shadow: 0 0 0 3px rgba(0, 114, 255, 0.18);
 }
 
 /* Main Container */

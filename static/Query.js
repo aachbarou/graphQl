@@ -1,5 +1,4 @@
-//import { GetUserId } from "./api.js";
-//export let UserId = localStorage.getItem('UserId');
+
 export function query() {
   return `
 {

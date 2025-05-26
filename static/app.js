@@ -43,7 +43,7 @@ try {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({ query: await query() })
+        body: JSON.stringify({ query:  query() })
     });
     
     const data = await response.json();
@@ -99,7 +99,7 @@ try {
 }
 
 function Lougout(){
-    localStorage.removeItem('token' )  ;localStorage.removeItem('UserId');
+    localStorage.removeItem('token' )  
     Data =  null
     Auth();
 }
